@@ -1,4 +1,4 @@
-def groupId = "com.tabuyos.orm"
+def groupId = "com.tabuyos.awesomeorm"
 def projectVersion = "0.1.0-SNAPSHOT"
 def aliyunRepositoryUrl = "https://maven.aliyun.com/repository/public"
 def aliyunRepositoryName = "AliyunPublic"

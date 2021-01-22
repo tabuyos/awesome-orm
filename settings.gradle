@@ -1,4 +1,6 @@
 rootProject.name = "awesome-orm"
+include("awesome-orm")
+include("awesome-orm-test")
 include("awesome-orm-annotation")
 include("awesome-orm-common")
 include("awesome-orm-core")
