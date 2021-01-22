@@ -1,0 +1,84 @@
+def groupId = "com.tabuyos.orm"
+def projectVersion = "0.1.0-SNAPSHOT"
+def aliyunRepositoryUrl = "https://maven.aliyun.com/repository/public"
+def aliyunRepositoryName = "AliyunPublic"
+def junitJupiterVersion = "5.7.0"
+def springCloudVersion = "2020.0.0"
+def springBootVersion = "2.4.1"
+
+group(groupId)
+version(projectVersion)
+
+allprojects {
+    group(groupId)
+    version(projectVersion)
+
+    repositories {
+        mavenLocal()
+        maven {
+            url(aliyunRepositoryUrl)
+            name(aliyunRepositoryName)
+        }
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: "java"
+
+    repositories {
+        mavenCentral()
+    }
+
+    configurations {
+        developmentOnly
+        runtimeClasspath {
+            extendsFrom developmentOnly
+        }
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    dependencies {
+//        implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+//        implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
+
+        testImplementation("org.junit.jupiter:junit-jupiter:${junitJupiterVersion}")
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    }
+
+    compileJava.inputs.files(processResources)
+
+    test {
+        useJUnitPlatform()
+//        jvmArgs("--illegal-access=deny")
+//        jvmArgs("--add-opens", "java.base/java.lang.invoke=ALL-UNNAMED")
+    }
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_15
+        targetCompatibility = JavaVersion.VERSION_15
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
+
+    task createSrcDirs {
+        sourceSets*.java.srcDirs*.each {
+            it.mkdirs()
+        }
+        sourceSets*.resources.srcDirs*.each {
+            it.mkdirs()
+        }
+    }
+
+    task createBuildScript {
+        dependsOn(createSrcDirs)
+        File file = new File("${projectDir}${File.separator}build.gradle")
+        if (!file.exists()) {
+            file.createNewFile()
+        }
+    }
+}
